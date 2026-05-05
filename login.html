@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auth UI (Firebase)</title>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#0f4c81,#1e90ff);
+  overflow:hidden;
+}
+
+.blob{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(40px);
+  opacity:0.6;
+}
+.blob1{width:300px;height:300px;background:#ff7eb3;top:10%;left:5%;}
+.blob2{width:250px;height:250px;background:#ffd166;bottom:10%;right:10%;}
+.blob3{width:200px;height:200px;background:#7afcff;top:50%;left:70%;}
+
+.container{
+  width:350px;
+  padding:30px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(15px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.2);
+  color:white;
+}
+
+h2{text-align:center;margin-bottom:20px}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border:none;
+  border-radius:8px;
+  outline:none;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  margin-top:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.primary{background:#1e90ff;color:white}
+.google{background:white;color:#333}
+
+.toggle{
+  text-align:center;
+  margin-top:15px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.hidden{display:none}
+
+.status{margin-top:10px;font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<div class="container">
+  
+  <!-- Login -->
+  <div id="login">
+    <h2>Login</h2>
+    <input id="loginEmail" type="email" placeholder="Email">
+    <input id="loginPassword" type="password" placeholder="Password">
+    <button class="primary" onclick="login()">Sign In</button>
+    <button class="google" onclick="googleAuth()">Continue with Google</button>
+    <div class="toggle" onclick="showSignup()">Don't have an account? Sign up</div>
+    <div class="status" id="loginStatus"></div>
+  </div>
+
+  <!-- Signup -->
+  <div id="signup" class="hidden">
+    <h2>Sign Up</h2>
+    <input id="signupEmail" type="email" placeholder="Email">
+    <input id="signupPassword" type="password" placeholder="Password">
+    <button class="primary" onclick="signup()">Create Account</button>
+    <button class="google" onclick="googleAuth()">Continue with Google</button>
+    <div class="toggle" onclick="showLogin()">Already have an account? Login</div>
+    <div class="status" id="signupStatus"></div>
+  </div>
+
+</div>
+
+<script>
+// 🔥 1. YOUR FIREBASE CONFIG (replace with your own)
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// 🔄 UI TOGGLE
+function showSignup(){
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('signup').classList.remove('hidden');
+}
+function showLogin(){
+  document.getElementById('signup').classList.add('hidden');
+  document.getElementById('login').classList.remove('hidden');
+}
+
+// 🔐 EMAIL/PASSWORD SIGNUP
+function signup(){
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+
+  auth.createUserWithEmailAndPassword(email,password)
+    .then(()=>{
+      document.getElementById('signupStatus').innerText = "Account created!";
+    })
+    .catch(err=>{
+      document.getElementById('signupStatus').innerText = err.message;
+    });
+}
+
+// 🔐 EMAIL/PASSWORD LOGIN
+function login(){
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  auth.signInWithEmailAndPassword(email,password)
+    .then(()=>{
+      document.getElementById('loginStatus').innerText = "Logged in!";
+    })
+    .catch(err=>{
+      document.getElementById('loginStatus').innerText = err.message;
+    });
+}
+
+// 🌐 GOOGLE AUTH
+function googleAuth(){
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  auth.signInWithPopup(provider)
+    .then(()=>{
+      alert("Google Sign-In Successful");
+    })
+    .catch(err=>{
+      alert(err.message);
+    });
+}
+
+// 👀 AUTH STATE
+firebase.auth().onAuthStateChanged(user => {
+  if(user){
+    console.log("User logged in:", user.email);
+  } else {
+    console.log("No user logged in");
+  }
+});
+</script>
+
+</body>
+</html>
