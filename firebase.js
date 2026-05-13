@@ -1,3 +1,4 @@
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD1wtbJh4IedR_rT66rkxugIPL3Wqd8l8I",
   authDomain: "edumate-klam.firebaseapp.com",
@@ -8,57 +9,103 @@ const firebaseConfig = {
   measurementId: "G-KS1HCZQSN1"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 
-function signup(){
-  const email = document.getElementById('signupEmail').value;
-  const password = document.getElementById('signupPassword').value;
 
-  auth.createUserWithEmailAndPassword(email,password)
-    .then(()=>{
-      document.getElementById('signupStatus').innerText='Account created successfully!';
+// SIGN UP
+function signup() {
 
-      setTimeout(()=>{
-        window.location.href='dashboard.html';
-      },1200);
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+
+    .then((userCredential) => {
+
+      document.getElementById("signupStatus").innerText =
+        "Account created successfully!";
+
+      console.log("User Created:", userCredential.user);
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 1000);
+
     })
-    .catch(err=>{
-      document.getElementById('signupStatus').innerText=err.message;
+
+    .catch((error) => {
+
+      console.error(error);
+
+      document.getElementById("signupStatus").innerText =
+        error.message;
     });
 }
 
-function login(){
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
 
-  auth.signInWithEmailAndPassword(email,password)
-    .then(()=>{
-      document.getElementById('loginStatus').innerText='Login successful!';
+// LOGIN
+function login() {
 
-      setTimeout(()=>{
-        window.location.href='dashboard.html';
-      },1200);
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+
+  auth.signInWithEmailAndPassword(email, password)
+
+    .then((userCredential) => {
+
+      document.getElementById("loginStatus").innerText =
+        "Login successful!";
+
+      console.log("Logged In:", userCredential.user);
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 1000);
+
     })
-    .catch(err=>{
-      document.getElementById('loginStatus').innerText=err.message;
+
+    .catch((error) => {
+
+      console.error(error);
+
+      document.getElementById("loginStatus").innerText =
+        error.message;
     });
 }
 
-function googleAuth(){
+
+// GOOGLE AUTH
+function googleAuth() {
+
   const provider = new firebase.auth.GoogleAuthProvider();
 
   auth.signInWithPopup(provider)
-    .then(()=>{
-      window.location.href='dashboard.html';
+
+    .then((result) => {
+
+      console.log("Google Login:", result.user);
+
+      window.location.href = "dashboard.html";
     })
-    .catch(err=>{
-      alert(err.message);
+
+    .catch((error) => {
+
+      console.error(error);
+
+      alert(error.message);
     });
 }
 
-firebase.auth().onAuthStateChanged(user=>{
-  if(user){
-    console.log('User logged in:',user.email);
+
+// AUTH STATE
+auth.onAuthStateChanged((user) => {
+
+  if (user) {
+    console.log("Current User:", user.email);
+  } else {
+    console.log("No user logged in");
   }
 });
