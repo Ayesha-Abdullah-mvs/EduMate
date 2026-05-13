@@ -1,188 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auth UI (Firebase)</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduMate — Authentication</title>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#0f4c81,#1e90ff);
-  overflow:hidden;
-}
+  <link rel="stylesheet" href="style.css">
 
-.blob{
-  position:absolute;
-  border-radius:50%;
-  filter:blur(40px);
-  opacity:0.6;
-}
-.blob1{width:300px;height:300px;background:#ff7eb3;top:10%;left:5%;}
-.blob2{width:250px;height:250px;background:#ffd166;bottom:10%;right:10%;}
-.blob3{width:200px;height:200px;background:#7afcff;top:50%;left:70%;}
-
-.container{
-  width:350px;
-  padding:30px;
-  border-radius:20px;
-  background:rgba(255,255,255,0.15);
-  backdrop-filter:blur(15px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.2);
-  color:white;
-}
-
-h2{text-align:center;margin-bottom:20px}
-
-input{
-  width:100%;
-  padding:10px;
-  margin:10px 0;
-  border:none;
-  border-radius:8px;
-  outline:none;
-}
-
-button{
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  margin-top:10px;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.primary{background:#1e90ff;color:white}
-.google{background:white;color:#333}
-
-.toggle{
-  text-align:center;
-  margin-top:15px;
-  cursor:pointer;
-  font-size:14px;
-}
-
-.hidden{display:none}
-
-.status{margin-top:10px;font-size:13px;text-align:center}
-</style>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
 <body>
 
-<div class="blob blob1"></div>
-<div class="blob blob2"></div>
-<div class="blob blob3"></div>
+<div id="app-wrap">
+<div id="app">
 
-<div class="container">
-  
-  <!-- Login -->
-  <div id="login">
-    <h2>Login</h2>
-    <input id="loginEmail" type="email" placeholder="Email">
-    <input id="loginPassword" type="password" placeholder="Password">
-    <button class="primary" onclick="login()">Sign In</button>
-    <button class="google" onclick="googleAuth()">Continue with Google</button>
-    <div class="toggle" onclick="showSignup()">Don't have an account? Sign up</div>
-    <div class="status" id="loginStatus"></div>
-  </div>
-
-  <!-- Signup -->
-  <div id="signup" class="hidden">
-    <h2>Sign Up</h2>
-    <input id="signupEmail" type="email" placeholder="Email">
-    <input id="signupPassword" type="password" placeholder="Password">
-    <button class="primary" onclick="signup()">Create Account</button>
-    <button class="google" onclick="googleAuth()">Continue with Google</button>
-    <div class="toggle" onclick="showLogin()">Already have an account? Login</div>
-    <div class="status" id="signupStatus"></div>
-  </div>
-
+<div id="blobs">
+  <div class="blob" style="width:300px;height:300px;background:#F97316;top:-80px;right:-60px;opacity:.32"></div>
+  <div class="blob" style="width:260px;height:260px;background:#0891B2;bottom:130px;left:-80px;opacity:.38"></div>
+  <div class="blob" style="width:210px;height:210px;background:#EC4899;bottom:310px;right:-50px;opacity:.26"></div>
+  <div class="blob" style="width:180px;height:180px;background:#10B981;top:300px;left:-55px;opacity:.28"></div>
 </div>
 
-<script>
-// 🔥 1. YOUR FIREBASE CONFIG (replace with your own)
-const firebaseConfig = {
-  apiKey: "AIzaSyD1wtbJh4IedR_rT66rkxugIPL3Wqd8l8I",
-  authDomain: "edumate-klam.firebaseapp.com",
-  projectId: "edumate-klam",
-  storageBucket: "edumate-klam.firebasestorage.app",
-  messagingSenderId: "603074031695",
-  appId: "1:603074031695:web:adc57aa9370f7a1fa7ba3a",
-  measurementId: "G-KS1HCZQSN1"
-};
+<div class="screen active" id="s-auth">
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+<div class="auth-blob" style="width:310px;height:310px;background:#0EA5E9;top:-100px;right:-80px;opacity:.5"></div>
+<div class="auth-blob" style="width:270px;height:270px;background:#F97316;bottom:80px;left:-90px;opacity:.4"></div>
+<div class="auth-blob" style="width:200px;height:200px;background:#06B6D4;bottom:280px;right:-40px;opacity:.3"></div>
 
-// 🔄 UI TOGGLE
-function showSignup(){
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('signup').classList.remove('hidden');
-}
-function showLogin(){
-  document.getElementById('signup').classList.add('hidden');
-  document.getElementById('login').classList.remove('hidden');
-}
+<div class="auth-container">
 
-// 🔐 EMAIL/PASSWORD SIGNUP
-function signup(){
-  const email = document.getElementById('signupEmail').value;
-  const password = document.getElementById('signupPassword').value;
+<div class="logo-wrap">
+  <div class="logo-box">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M8 25L16 7L24 25" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.5 19H21.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
 
-  auth.createUserWithEmailAndPassword(email,password)
-    .then(()=>{
-      document.getElementById('signupStatus').innerText = "Account created!";
-    })
-    .catch(err=>{
-      document.getElementById('signupStatus').innerText = err.message;
-    });
-}
+  <div class="title big">Edu<span>Mate</span></div>
+  <div class="sub">Your AI-powered academic ecosystem</div>
+</div>
 
-// 🔐 EMAIL/PASSWORD LOGIN
-function login(){
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
+<div class="tabs">
+  <button class="tab-btn on" id="tb-login" onclick="switchTab('login')">Sign In</button>
+  <button class="tab-btn" id="tb-signup" onclick="switchTab('signup')">Sign Up</button>
+</div>
 
-  auth.signInWithEmailAndPassword(email,password)
-    .then(()=>{
-      document.getElementById('loginStatus').innerText = "Logged in!";
-    })
-    .catch(err=>{
-      document.getElementById('loginStatus').innerText = err.message;
-    });
-}
+<!-- LOGIN -->
+<div id="f-login">
 
-// 🌐 GOOGLE AUTH
-function googleAuth(){
-  const provider = new firebase.auth.GoogleAuthProvider();
+  <div class="input-wrap">
+    <input class="inp" id="loginEmail" type="email" placeholder="Email address">
+  </div>
 
-  auth.signInWithPopup(provider)
-    .then(()=>{
-      alert("Google Sign-In Successful");
-    })
-    .catch(err=>{
-      alert(err.message);
-    });
-}
+  <div class="input-wrap">
+    <input class="inp" id="loginPassword" type="password" placeholder="Password">
+  </div>
 
-// 👀 AUTH STATE
-firebase.auth().onAuthStateChanged(user => {
-  if(user){
-    console.log("User logged in:", user.email);
-  } else {
-    console.log("No user logged in");
-  }
-});
-</script>
+  <button class="btn" onclick="login()">Sign In →</button>
 
+  <div class="or-divider">or continue with</div>
+
+  <div class="socials">
+    <button class="btn-ghost" onclick="googleAuth()">Google</button>
+  </div>
+
+  <div id="loginStatus" class="status"></div>
+</div>
+
+<!-- SIGNUP -->
+<div id="f-signup" style="display:none">
+
+  <div class="input-wrap">
+    <input class="inp" id="signupName" type="text" placeholder="Full name">
+  </div>
+
+  <div class="input-wrap">
+    <input class="inp" id="signupEmail" type="email" placeholder="Email address">
+  </div>
+
+  <div class="input-wrap">
+    <input class="inp" id="signupPassword" type="password" placeholder="Create password">
+  </div>
+
+  <button class="btn" onclick="signup()">Create Account →</button>
+
+  <div class="or-divider">or continue with</div>
+
+  <div class="socials">
+    <button class="btn-ghost" onclick="googleAuth()">Sign Up with Google</button>
+  </div>
+
+  <div id="signupStatus" class="status"></div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+<script src="firebase.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
