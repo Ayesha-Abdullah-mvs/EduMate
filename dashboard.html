@@ -3,49 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduMate Dashboard</title>
+  <title>EduMate — Learning App</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div id="app-wrap">
 <div id="app">
+  <div id="blobs" aria-hidden="true">
+    <div class="blob" style="width:330px;height:330px;background:#F97316;top:-90px;right:-90px;opacity:.34"></div>
+    <div class="blob" style="width:280px;height:280px;background:#0891B2;bottom:120px;left:-90px;opacity:.36"></div>
+    <div class="blob" style="width:230px;height:230px;background:#EC4899;bottom:280px;right:-70px;opacity:.24"></div>
+  </div>
 
-<div class="screen active">
+  <section class="screen active" id="s-ob1">
+    <div class="scroll-body onboarding-body">
+      <div class="step-label">STEP 1 OF 2</div>
+      <h1 class="title hero-title">What's your<br>class level? 📚</h1>
+      <p class="sub hero-sub">We'll load your full curriculum automatically</p>
+      <div class="lvl" onclick="pickLvl(this)" data-v="9th"><span class="emoji-book">📗</span><div><div class="lvl-title">9th Class</div><div class="sub lvl-sub">Matric Year 1</div></div></div>
+      <div class="lvl" onclick="pickLvl(this)" data-v="10th"><span class="emoji-book">📘</span><div><div class="lvl-title">10th Class</div><div class="sub lvl-sub">Matric Year 2</div></div></div>
+      <div class="lvl" onclick="pickLvl(this)" data-v="11th"><span class="emoji-book">📙</span><div><div class="lvl-title">11th Class</div><div class="sub lvl-sub">Intermediate Year 1 (FSc / ICS)</div></div></div>
+      <div class="lvl on" onclick="pickLvl(this)" data-v="12th"><span class="emoji-book">📕</span><div><div class="lvl-title">12th Class</div><div class="sub lvl-sub">Intermediate Year 2 (FSc / ICS)</div></div></div>
+      <div class="lvl" onclick="pickLvl(this)" data-v="uni"><span class="emoji-book">🎓</span><div><div class="lvl-title">University</div><div class="sub lvl-sub">BS / BCS / BBA / BEng</div></div></div>
+      <button class="btn" style="margin-top:20px" onclick="goTo('s-ob2')">Continue →</button>
+    </div>
+  </section>
 
-<div style="padding:52px 22px 90px">
+  <section class="screen" id="s-ob2">
+    <div class="scroll-body onboarding-body">
+      <div class="step-label">STEP 2 OF 2</div>
+      <h1 class="title hero-title">Pick your<br>subjects ✏️</h1>
+      <p class="sub hero-sub">Select all that apply — tap to toggle</p>
+      <div class="subject-picker">
+        <button class="sel-chip on" onclick="this.classList.toggle('on')">Physics</button>
+        <button class="sel-chip on" onclick="this.classList.toggle('on')">Chemistry</button>
+        <button class="sel-chip on" onclick="this.classList.toggle('on')">Biology</button>
+        <button class="sel-chip on" onclick="this.classList.toggle('on')">Mathematics</button>
+        <button class="sel-chip" onclick="this.classList.toggle('on')">Computer Science</button>
+        <button class="sel-chip" onclick="this.classList.toggle('on')">English</button>
+        <button class="sel-chip on" onclick="this.classList.toggle('on')">OOP with C#</button>
+        <button class="sel-chip on" onclick="this.classList.toggle('on')">Data Structures</button>
+        <button class="sel-chip" onclick="this.classList.toggle('on')">Urdu</button>
+        <button class="sel-chip" onclick="this.classList.toggle('on')">Islamiat</button>
+        <button class="sel-chip" onclick="this.classList.toggle('on')">Statistics</button>
+        <button class="sel-chip" onclick="this.classList.toggle('on')">Pakistan Studies</button>
+        <button class="sel-chip" onclick="this.classList.toggle('on')">PF with C++</button>
+      </div>
+      <button class="btn" onclick="goTo('s-dash');setNav('nav-home')">Start Learning →</button>
+    </div>
+  </section>
 
-<h1 class="title">Welcome to EduMate</h1>
+  <section class="screen" id="s-dash">
+    <div class="scroll-body page-body">
+      <div class="top-row">
+        <div><div class="lbl">Good morning ☀️</div><h2 class="title page-title">Hello, Ayesha</h2></div>
+        <button class="icon-btn notify" aria-label="Notifications"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="ndot"></span></button>
+      </div>
+      <div class="badges"><span class="streak-b">🔥 12 day streak</span><span class="xp-b">⚡ 2,840 XP</span></div>
+      <article class="continue-card" onclick="goTo('s-study');setNav('nav-study')">
+        <div class="lbl">Continue where you left off</div>
+        <div class="continue-main"><div><h3>OOP with C#</h3><p>Ch.4 — Inheritance &amp; Polymorphism</p></div><span class="play-tile">▶</span></div>
+        <div class="ptrack"><div class="pfill purple" style="width:68%"></div></div>
+        <div class="progress-meta"><span>68% complete</span><strong>Chapter 4 / 6</strong></div>
+      </article>
+      <div class="live-card"><span><i></i>5 students studying now</span><em>3 from your group</em></div>
+      <div class="lbl section-label">Your subjects</div>
+      <div class="subjects-grid">
+        <article class="sub-card blue" onclick="goTo('s-study');setNav('nav-study')"><div class="subject-icon">💻</div><h3>OOP (C#)</h3><p>6 chapters</p><div class="ptrack"><div class="pfill" style="width:68%;background:#3B82F6"></div></div></article>
+        <article class="sub-card green"><div class="subject-icon">🧬</div><h3>Biology</h3><p>8 chapters</p><div class="ptrack"><div class="pfill" style="width:45%;background:#10B981"></div></div></article>
+        <article class="sub-card amber"><div class="subject-icon">📐</div><h3>Mathematics</h3><p>10 chapters</p><div class="ptrack"><div class="pfill" style="width:30%;background:#F59E0B"></div></div></article>
+        <article class="sub-card pink"><div class="subject-icon">⚗️</div><h3>Chemistry</h3><p>7 chapters</p><div class="ptrack"><div class="pfill" style="width:55%;background:#EC4899"></div></div></article>
+      </div>
+      <div class="lbl section-label">Global Leaderboard</div>
+      <div class="lbi"><span>🥇</span><div class="av purple-av">A</div><div><h4>Ahmed Raza</h4><p>Physics · OOP</p></div><strong>4,210 XP</strong></div>
+      <div class="lbi"><span>🥈</span><div class="av sky-av">S</div><div><h4>Sara Khan</h4><p>Biology · Chemistry</p></div><strong class="muted-score">3,870 XP</strong></div>
+      <div class="lbi you"><span>#4</span><div class="av rose-av">Y</div><div><h4>You (Ayesha)</h4><p>OOP · Math · Bio</p></div><strong>2,840 XP</strong></div>
+    </div>
+  </section>
 
-<p class="sub" style="margin-top:10px">
-Your AI-powered learning dashboard.
-</p>
+  <section class="screen" id="s-study">
+    <div class="study-head"><div class="top-row left"><button class="icon-btn" onclick="goBack()" aria-label="Back">←</button><h2 class="title page-title">Study</h2></div><div class="chip-row" id="subfilter"><button class="chip on" onclick="filt(this,'oop')">OOP (C#)</button><button class="chip" onclick="filt(this,'bio')">Biology</button><button class="chip" onclick="filt(this,'math')">Mathematics</button><button class="chip" onclick="filt(this,'chem')">Chemistry</button></div></div>
+    <div class="scroll-body study-body"><article class="ai-banner"><div><strong>✨ AI Powered</strong><h3>Generate Study Plan</h3><p>Pick topics + time → get your roadmap</p></div><span>🤖</span></article><div class="lbl section-label" id="ch-label">OOP with C# — Chapters</div><div id="ch-container"></div></div>
+  </section>
 
-<div style="margin-top:30px">
-  <button class="btn" onclick="window.location.href='study.html'">
-    Open Study Section
-  </button>
+  <section class="screen" id="s-focus">
+    <div class="focus-body"><div class="top-row"><h2 class="title page-title">Focus Session</h2><span class="xp-b" id="xp-preview">⚡ +0 XP</span></div><div class="chip-row"><button class="chip on">OOP (C#)</button><button class="chip">Biology</button><button class="chip">Math</button><button class="chip">Chemistry</button></div><div class="timer-wrap"><svg width="220" height="220" viewBox="0 0 220 220"><defs><linearGradient id="tg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs><circle cx="110" cy="110" r="95" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="11"/><circle id="t-ring" cx="110" cy="110" r="95" fill="none" stroke="url(#tg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="597" stroke-dashoffset="0" transform="rotate(-90 110 110)"/></svg><div><strong id="t-disp">25:00</strong><span id="t-lbl">Focus Time</span></div></div><div class="timer-controls"><button onclick="resetTimer()">↻</button><button class="timer-play" onclick="toggleTimer()" id="play-btn"><span id="play-ico">▶</span></button><button onclick="saveSession()">▣</button></div><div class="lbl section-label">Today's sessions</div><div class="session-list"><div><span><i class="green-dot"></i>Biology</span><em>2:00–4:00 PM · 2h</em></div><div><span><i class="blue-dot"></i>OOP (C#)</span><em>11:00–12:30 PM · 1.5h</em></div></div></div>
+  </section>
+
+  <section class="screen" id="s-analytics">
+    <div class="scroll-body page-body"><h2 class="title page-title">Analytics</h2><p class="sub">Week of May 5–11, 2026</p><div class="mini-stats"><div class="mstat"><p>This week</p><strong>18.5h</strong></div><div class="mstat"><p>Streak</p><strong>🔥 12</strong></div><div class="mstat"><p>Quizzes</p><strong>24</strong></div></div><div class="lbl section-label">Daily Study Hours</div><div class="chart-card"><div id="bar-chart" class="bar-chart"></div><div class="days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div><div class="lbl section-label">Subject breakdown</div><div id="subj-breakdown" class="breakdown"></div><div class="lbl section-label">XP Progress</div><div class="xp-card"><div><strong>2,840</strong><span>XP</span></div><p>Only 160 XP to reach Gold tier 🏆</p><div class="ptrack"><div class="pfill purple" style="width:95%"></div></div><div class="progress-meta"><span>Silver (2,000)</span><span>Gold (3,000)</span></div></div></div>
+  </section>
+
+
+  <nav id="bnav">
+    <button class="ni on" id="nav-home" onclick="goTo('s-dash');setNav('nav-home')"><span>⌂</span><em>Home</em></button>
+    <button class="ni" id="nav-study" onclick="goTo('s-study');setNav('nav-study')"><span>▱</span><em>Study</em></button>
+    <button class="ni" id="nav-focus" onclick="goTo('s-focus');setNav('nav-focus')"><span>◷</span><em>Focus</em></button>
+    <button class="ni" id="nav-analytics" onclick="goTo('s-analytics');setNav('nav-analytics')"><span>▥</span><em>Stats</em></button>
+    <button class="ni" id="nav-groups" onclick="window.location.href='groups.html'"><span>♧</span><em>Groups</em></button>
+  </nav>
 </div>
-
-<div style="margin-top:15px">
-  <button class="btn" onclick="window.location.href='focus.html'">
-    Focus Timer
-  </button>
+<div id="scr-ind"></div>
 </div>
-
-<div style="margin-top:15px">
-  <button class="btn" onclick="window.location.href='analytics.html'">
-    Analytics
-  </button>
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
+<script src="app.js"></script>
 </body>
 </html>
