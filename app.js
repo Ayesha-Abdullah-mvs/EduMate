@@ -76,12 +76,7 @@ function renderAnalytics(){
     [{n:'OOP (C#)',h:7.5,c:'#3B82F6',p:41},{n:'Biology',h:5,c:'#10B981',p:27},{n:'Chemistry',h:3.5,c:'#EC4899',p:19},{n:'Mathematics',h:2.5,c:'#F59E0B',p:13}].forEach(s=>{bd.innerHTML += `<div class="breakdown-row"><div><strong>${s.n}</strong><span>${s.h}h · ${s.p}%</span></div><div class="ptrack"><div class="pfill" style="width:${s.p}%;background:${s.c}"></div></div></div>`;});
   }
 }
-const HASH_ROUTES = {dash:'s-dash',study:'s-study',focus:'s-focus',analytics:'s-analytics'};
-const initialRoute = HASH_ROUTES[window.location.hash.replace('#','')];
-if(initialRoute){
-  goTo(initialRoute);
-  setNav(`nav-${window.location.hash.replace('#','') === 'dash' ? 'home' : window.location.hash.replace('#','')}`);
-} else {
-  updateInd();
-}
+function showGroups(){alert("📱 Groups — Phase 2 feature!\n\n• Join public study circles\n• See who's studying live\n• Group leaderboard\n• Shared focus rooms");}
+
+updateInd();
 renderChapters();
