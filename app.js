@@ -76,7 +76,25 @@ function renderAnalytics(){
     [{n:'OOP (C#)',h:7.5,c:'#3B82F6',p:41},{n:'Biology',h:5,c:'#10B981',p:27},{n:'Chemistry',h:3.5,c:'#EC4899',p:19},{n:'Mathematics',h:2.5,c:'#F59E0B',p:13}].forEach(s=>{bd.innerHTML += `<div class="breakdown-row"><div><strong>${s.n}</strong><span>${s.h}h · ${s.p}%</span></div><div class="ptrack"><div class="pfill" style="width:${s.p}%;background:${s.c}"></div></div></div>`;});
   }
 }
-function showGroups(){alert("📱 Groups — Phase 2 feature!\n\n• Join public study circles\n• See who's studying live\n• Group leaderboard\n• Shared focus rooms");}
+function showGroups(){
+  window.location.href = 'groups.html';
+}
+
+function openHashRoute(){
+  const routes = {
+    dash:['s-dash','nav-home'],
+    study:['s-study','nav-study'],
+    focus:['s-focus','nav-focus'],
+    analytics:['s-analytics','nav-analytics']
+  };
+  const route = routes[window.location.hash.replace('#','')];
+  if(route){
+    goTo(route[0]);
+    setNav(route[1]);
+  }
+}
 
 updateInd();
 renderChapters();
+openHashRoute();
+window.addEventListener('hashchange', openHashRoute);

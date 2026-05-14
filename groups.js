@@ -1,4 +1,6 @@
 let activeGroupFilter = 'all';
+let activeGroupsTab = 'my';
+const joinedGroupKeys = new Set(['uet', 'bio']);
 
 const groupDetails = {
   uet:{title:'UET CS Batch 2026',desc:'Computer science batch group for OOP, DSA, exams, and daily focus sessions.',icon:'🎓',meta:['243 members','1,284h this week','Very active']},
@@ -25,13 +27,16 @@ function setActiveScreen(id){
 
 function showGroupsList(){
   setActiveScreen('s-groups');
+  refreshGroupState();
 }
 
 function switchGroupsTab(tab){
+  activeGroupsTab = tab;
   document.getElementById('groups-my')?.classList.toggle('hidden', tab !== 'my');
   document.getElementById('groups-discover')?.classList.toggle('hidden', tab !== 'discover');
   document.getElementById('groups-tab-my')?.classList.toggle('on', tab === 'my');
   document.getElementById('groups-tab-discover')?.classList.toggle('on', tab === 'discover');
+  refreshGroupState();
 }
 
 function setGroupFilter(el,filter){
@@ -43,26 +48,48 @@ function setGroupFilter(el,filter){
 
 function filterGroups(){
   const q = (document.getElementById('group-search')?.value || '').toLowerCase().trim();
+  let visibleCount = 0;
   document.querySelectorAll('#discover-list .group-card').forEach(card => {
-    const matchesText = !q || card.dataset.search.includes(q) || card.textContent.toLowerCase().includes(q);
-    const matchesFilter = activeGroupFilter === 'all' || card.dataset.filter.includes(activeGroupFilter);
-    card.style.display = matchesText && matchesFilter ? 'flex' : 'none';
+    const searchText = `${card.dataset.search || ''} ${card.textContent}`.toLowerCase();
+    const filterText = card.dataset.filter || '';
+    const matchesText = !q || searchText.includes(q);
+    const matchesFilter = activeGroupFilter === 'all' || filterText.includes(activeGroupFilter);
+    const isVisible = matchesText && matchesFilter;
+    card.classList.toggle('hidden-card', !isVisible);
+    if(isVisible) visibleCount++;
   });
+
+  const empty = document.getElementById('discover-empty');
+  if(empty) empty.classList.toggle('hidden', visibleCount !== 0);
+  const count = document.getElementById('discover-count');
+  if(count) count.textContent = `${visibleCount} group${visibleCount === 1 ? '' : 's'} found`;
 }
 
 function joinGroup(btn){
-  btn.textContent = btn.textContent.includes('Request') ? 'Requested ✓' : 'Joined ✓';
+  const card = btn.closest('.group-card');
+  const key = card?.dataset.group;
+  if(key) joinedGroupKeys.add(key);
+
+  const isRequest = btn.textContent.includes('Request');
+  btn.textContent = isRequest ? 'Requested ✓' : 'Joined ✓';
   btn.disabled = true;
-  btn.closest('.group-card')?.classList.add('joined-now');
+  card?.classList.add('joined-now');
+
+  refreshGroupState();
+  showGroupToast(isRequest ? 'Request sent! We’ll notify you after approval.' : 'Joined! Added to your study circles.');
 }
 
 function leaveGroup(btn){
   const card = btn.closest('.group-card');
+  const key = card?.dataset.group;
+  if(key) joinedGroupKeys.delete(key);
   if(card){
     card.style.opacity = '.55';
     btn.textContent = 'Left';
     btn.disabled = true;
   }
+  refreshGroupState();
+  showGroupToast('Group removed from your circles.');
 }
 
 function openGroupDetail(key='uet'){
@@ -91,4 +118,32 @@ function renderGroupLeaderboard(range='weekly'){
     .join('');
 }
 
+function refreshGroupState(){
+  document.querySelectorAll('#discover-list .group-card').forEach(card => {
+    const key = card.dataset.group;
+    const primary = card.querySelector('.group-actions button:first-child');
+    if(!key || !primary) return;
+    const isPrivate = primary.textContent.includes('Request') || card.dataset.filter?.includes('private');
+    if(joinedGroupKeys.has(key)){
+      primary.textContent = isPrivate ? 'Requested ✓' : 'Joined ✓';
+      primary.disabled = true;
+      card.classList.add('joined-now');
+    }
+  });
+
+  const joinedCount = document.getElementById('joined-count');
+  if(joinedCount) joinedCount.textContent = `${joinedGroupKeys.size} active circles`;
+  filterGroups();
+}
+
+function showGroupToast(message){
+  const toast = document.getElementById('group-toast');
+  if(!toast) return;
+  toast.textContent = message;
+  toast.classList.add('show');
+  window.clearTimeout(showGroupToast.timer);
+  showGroupToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2400);
+}
+
 renderGroupLeaderboard('weekly');
+refreshGroupState();
