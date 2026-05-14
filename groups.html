@@ -29,7 +29,7 @@
         <button class="icon-btn" onclick="window.location.href='dashboard.html#dash'" aria-label="Back to dashboard">←</button>
       </div>
 
-      <div class="groups-hero">
+      <div class="groups-hero app-card">
         <div>
           <strong>🔥 Motivation layer</strong>
           <h3>18 friends focused this hour</h3>
@@ -44,8 +44,8 @@
       </div>
 
       <div id="groups-my" class="groups-panel">
-        <div class="lbl section-label">Joined groups</div>
-        <article class="group-card joined">
+        <div class="section-title-row"><div class="lbl section-label">Joined groups</div><span id="joined-count">2 active circles</span></div>
+        <article class="group-card joined" data-group="uet">
           <div class="group-icon purple-av">🎓</div>
           <div class="group-main">
             <div class="group-card-head"><h3>UET CS Batch 2026</h3><span class="live-pill">18 live</span></div>
@@ -55,7 +55,7 @@
           </div>
         </article>
 
-        <article class="group-card joined">
+        <article class="group-card joined" data-group="bio">
           <div class="group-icon green-av">🧬</div>
           <div class="group-main">
             <div class="group-card-head"><h3>FBISE Biology Toppers</h3><span class="live-pill">52 live</span></div>
@@ -72,7 +72,7 @@
       </div>
 
       <div id="groups-discover" class="groups-panel hidden">
-        <div class="search-wrap"><input id="group-search" class="inp" type="search" placeholder="Search 9th Biology, FAST CS, OOP C#..." oninput="filterGroups()"></div>
+        <div class="search-wrap"><span>⌕</span><input id="group-search" class="inp" type="search" placeholder="Search 9th Biology, FAST CS, OOP C#..." oninput="filterGroups()"></div>
         <div class="discover-filters">
           <button class="chip on" onclick="setGroupFilter(this,'all')">All</button>
           <button class="chip" onclick="setGroupFilter(this,'level')">Education Level</button>
@@ -83,29 +83,30 @@
           <button class="chip" onclick="setGroupFilter(this,'private')">Private</button>
         </div>
 
-        <div class="lbl section-label">Recommended for you</div>
+        <div class="section-title-row"><div class="lbl section-label">Recommended for you</div><span id="discover-count">5 groups found</span></div>
         <div id="discover-list">
-          <article class="group-card discover" data-filter="subject public" data-search="oop c# programming object oriented">
+          <article class="group-card discover" data-group="oop" data-filter="subject public" data-search="oop c# programming object oriented">
             <div class="group-icon blue-av">💻</div>
             <div class="group-main"><div class="group-card-head"><h3>OOP C# Night Coders</h3><span class="activity-score">94%</span></div><p>1,120 members · 3,420 weekly hours · Public</p><div class="group-actions"><button onclick="joinGroup(this)">Join Group</button><button class="ghost" onclick="openGroupDetail('oop')">Preview</button></div></div>
           </article>
-          <article class="group-card discover" data-filter="university public" data-search="fast cs computer science university">
+          <article class="group-card discover" data-group="fast" data-filter="university public" data-search="fast cs computer science university">
             <div class="group-icon orange-av">🏫</div>
             <div class="group-main"><div class="group-card-head"><h3>FAST CS Prep Circle</h3><span class="activity-score">89%</span></div><p>678 members · 1,980 weekly hours · Public</p><div class="group-actions"><button onclick="joinGroup(this)">Join Group</button><button class="ghost" onclick="openGroupDetail('fast')">Preview</button></div></div>
           </article>
-          <article class="group-card discover" data-filter="level board subject public" data-search="9th biology fbise board matric">
+          <article class="group-card discover" data-group="bio9" data-filter="level board subject public" data-search="9th biology fbise board matric">
             <div class="group-icon green-av">🌱</div>
             <div class="group-main"><div class="group-card-head"><h3>9th Biology Sprint</h3><span class="activity-score">86%</span></div><p>342 members · 940 weekly hours · Public</p><div class="group-actions"><button onclick="joinGroup(this)">Join Group</button><button class="ghost" onclick="openGroupDetail('bio9')">Preview</button></div></div>
           </article>
-          <article class="group-card discover" data-filter="university public" data-search="uet entry test engineering ecat">
+          <article class="group-card discover" data-group="entry" data-filter="university public" data-search="uet entry test engineering ecat">
             <div class="group-icon rose-av">🚀</div>
             <div class="group-main"><div class="group-card-head"><h3>UET Entry Test Warriors</h3><span class="activity-score">91%</span></div><p>2,034 members · 5,110 weekly hours · Public</p><div class="group-actions"><button onclick="joinGroup(this)">Join Group</button><button class="ghost" onclick="openGroupDetail('entry')">Preview</button></div></div>
           </article>
-          <article class="group-card discover" data-filter="level subject private" data-search="12th chemistry private fsc board">
+          <article class="group-card discover" data-group="chem12" data-filter="level subject private" data-search="12th chemistry private fsc board">
             <div class="group-icon orange-av">⚗️</div>
             <div class="group-main"><div class="group-card-head"><h3>12th Chemistry Private Pod</h3><span class="activity-score">78%</span></div><p>96 members · 410 weekly hours · Private</p><div class="group-actions"><button onclick="joinGroup(this)">Request Join</button><button class="ghost" onclick="openGroupDetail('chem12')">Preview</button></div></div>
           </article>
         </div>
+        <div id="discover-empty" class="empty-state hidden"><strong>No circles found</strong><p>Try another keyword or filter to discover more study friends.</p></div>
       </div>
     </div>
   </section>
@@ -171,6 +172,7 @@
   </nav>
 </div>
 <div id="scr-ind">⑦ Groups</div>
+<div id="group-toast" role="status" aria-live="polite"></div>
 </div>
 <script src="groups.js"></script>
 </body>

@@ -80,5 +80,21 @@ function showGroups(){
   window.location.href = 'groups.html';
 }
 
+function openHashRoute(){
+  const routes = {
+    dash:['s-dash','nav-home'],
+    study:['s-study','nav-study'],
+    focus:['s-focus','nav-focus'],
+    analytics:['s-analytics','nav-analytics']
+  };
+  const route = routes[window.location.hash.replace('#','')];
+  if(route){
+    goTo(route[0]);
+    setNav(route[1]);
+  }
+}
+
 updateInd();
 renderChapters();
+openHashRoute();
+window.addEventListener('hashchange', openHashRoute);
