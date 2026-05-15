@@ -87,7 +87,17 @@
 
   <section class="screen" id="s-study">
     <div class="study-head"><div class="top-row left"><button class="icon-btn" onclick="goBack()" aria-label="Back">←</button><h2 class="title page-title">Study</h2></div><div class="chip-row" id="subfilter"><button class="chip on" onclick="filt(this,'oop')">OOP (C#)</button><button class="chip" onclick="filt(this,'bio')">Biology</button><button class="chip" onclick="filt(this,'math')">Mathematics</button><button class="chip" onclick="filt(this,'chem')">Chemistry</button></div></div>
-    <div class="scroll-body study-body"><article class="ai-banner"><div><strong>✨ AI Powered</strong><h3>Generate Study Plan</h3><p>Pick topics + time → get your roadmap</p></div><span>🤖</span></article><div class="lbl section-label" id="ch-label">OOP with C# — Chapters</div><div id="ch-container"></div></div>
+    <div class="scroll-body study-body">
+      <article class="ai-banner" role="button" tabindex="0" onclick="openStudyPlanner()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStudyPlanner()}">
+        <div><strong>✨ AI Powered</strong><h3>Generate Study Plan</h3><p>Pick topics + time → get your locked AI roadmap</p></div><span>🤖</span>
+      </article>
+      <div id="study-planner" class="planner-panel hidden"></div>
+      <div id="study-roadmap" class="roadmap-panel hidden"></div>
+      <div id="chapter-list">
+        <div class="lbl section-label" id="ch-label">OOP with C# — Chapters</div>
+        <div id="ch-container"></div>
+      </div>
+    </div>
   </section>
 
   <section class="screen" id="s-focus">
